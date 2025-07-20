@@ -1,26 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export function useCamera() {
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function setupCamera() {
-      try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        setStream(mediaStream);
-      } catch (error) {
-        console.error("Error accessing camera:", error);
-        alert("Could not access the camera. Please check permissions.");
-      }
+  const getCameraStream = useCallback(async () => {
+    setError(null); // Clear previous errors
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      setStream(mediaStream);
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      setError(
+        "Camera access was denied. Please enable it in your browser settings and try again."
+      );
     }
-    setupCamera();
+  }, []);
 
+  // Attempt to get the camera stream automatically on initial load.
+  useEffect(() => {
+    getCameraStream();
+  }, [getCameraStream]);
+
+  // Cleanup function to stop the stream when the component unmounts.
+  useEffect(() => {
     return () => {
       stream?.getTracks().forEach((track) => track.stop());
     };
-  }, []);
+  }, [stream]);
 
-  return stream;
+  return { stream, error, getCameraStream };
 }

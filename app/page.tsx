@@ -10,7 +10,10 @@ import {
   Center,
   Loader,
   Box,
+  Button,
+  Alert,
 } from "@mantine/core";
+import { IconAlertCircle, IconVideo } from "@tabler/icons-react";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceApi } from "@/hooks/useFaceApi";
 import { useMediaRecorder } from "@/hooks/useMediaRecorder";
@@ -27,7 +30,7 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const stream = useCamera();
+  const { stream, error: cameraError, getCameraStream } = useCamera();
   const modelsLoaded = useFaceApi();
   const {
     isRecording,
@@ -51,7 +54,8 @@ export default function Home() {
     setRecordedUrl(null);
   };
 
-  const isLoading = !stream || !modelsLoaded;
+  const isLoading = !modelsLoaded && !cameraError;
+  const showVideoFeed = stream && modelsLoaded;
 
   return (
     <Box mih="100vh">
@@ -69,14 +73,48 @@ export default function Home() {
             className="w-full md:w-[80%]"
             p="sm"
           >
-            {isLoading ? (
+            {isLoading && (
               <Center h={400}>
                 <Stack align="center">
                   <Loader />
-                  <Text>Loading models and accessing camera...</Text>
+                  <Text>Loading models...</Text>
                 </Stack>
               </Center>
-            ) : (
+            )}
+
+            {cameraError && (
+              <Center h={400}>
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="Camera Error"
+                  color="red"
+                  variant="light"
+                >
+                  <Stack>
+                    <Text>{cameraError}</Text>
+                    <Button onClick={getCameraStream} variant="outline">
+                      Try Again
+                    </Button>
+                  </Stack>
+                </Alert>
+              </Center>
+            )}
+
+            {!isLoading && !cameraError && !stream && (
+              <Center h={400}>
+                <Stack align="center">
+                  <Text>Camera is not connected.</Text>
+                  <Button
+                    onClick={getCameraStream}
+                    leftSection={<IconVideo size={16} />}
+                  >
+                    Connect Camera
+                  </Button>
+                </Stack>
+              </Center>
+            )}
+
+            {showVideoFeed && (
               <FaceTracker
                 videoRef={videoRef}
                 canvasRef={canvasRef}
@@ -89,6 +127,7 @@ export default function Home() {
             isRecording={isRecording}
             onStart={startRecording}
             onStop={stopRecording}
+            disabled={!showVideoFeed}
           />
 
           {isClient && recordedUrl && (

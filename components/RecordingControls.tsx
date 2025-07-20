@@ -5,19 +5,21 @@ interface RecordingControlsProps {
   isRecording: boolean;
   onStart: () => void;
   onStop: () => void;
+  disabled?: boolean;
 }
 
 export function RecordingControls({
   isRecording,
   onStart,
   onStop,
+  disabled,
 }: RecordingControlsProps) {
   return (
     <Group>
       <Button
         leftSection={<IconPlayerPlay size={16} />}
         onClick={onStart}
-        disabled={isRecording}
+        disabled={isRecording || disabled}
         variant="light"
         color="green"
       >
@@ -35,7 +37,7 @@ export function RecordingControls({
         <Button
           leftSection={<IconPlayerStop size={16} />}
           onClick={onStop}
-          disabled={!isRecording}
+          disabled={!isRecording || disabled}
           variant="light"
           color="red"
         >
