@@ -2,8 +2,6 @@
 
 FaceWatch is a web application that uses your browser to perform live face detection from your webcam feed. You can also record the stream, including the face detection overlays, and save it directly to your browser's local storage.
 
-![FaceWatch Screenshot](https://i.imgur.com/5v2hS6W.png)
-
 ## ✨ Key Features
 
 - **Live Face Detection**: Uses `face-api.js` to draw bounding boxes around faces in real-time.
