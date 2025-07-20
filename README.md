@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FaceWatch: Real-Time Face Tracking & Video Recording
 
-## Getting Started
+FaceWatch is a web application that uses your browser to perform live face detection from your webcam feed. You can also record the stream, including the face detection overlays, and save it directly to your browser's local storage.
 
-First, run the development server:
+![FaceWatch Screenshot](https://i.imgur.com/5v2hS6W.png)
+
+## ✨ Key Features
+
+- **Live Face Detection**: Uses `face-api.js` to draw bounding boxes around faces in real-time.
+- **Video Recording**: Record the canvas stream with face detections and save it locally.
+- **Local Playback**: Instantly watch, replay, and delete your recordings.
+- **Responsive Design**: A clean, modern UI that works on both desktop and mobile.
+- **Light & Dark Modes**: Toggle between light and dark themes for your comfort.
+- **User-Controlled Permissions**: The app requests camera access on load and provides a manual reconnect option if permission is denied.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (React)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **UI Library**: [Mantine](https://mantine.dev/)
+- **Face Detection**: [face-api.js](https://github.com/justadudewhohacks/face-api.js/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) (via PostCSS)
+
+## 🚀 Getting Started
+
+Follow these instructions to get a copy of the project up and running on your local machine.
+
+### Prerequisites
+
+You need to have [Node.js](https://nodejs.org/) (version 18 or newer) and a package manager like `pnpm`, `npm`, or `yarn` installed.
+
+This project uses `pnpm`. You can install it via:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install -g pnpm
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **Clone the repository:**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    ```bash
+    git clone https://github.com/Nylite-soda/facewatch.git
+    cd facewatch
+    ```
 
-## Learn More
+2.  **Install dependencies:**
+    ```bash
+    pnpm install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+### Running the Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the application in development mode:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result. The page will auto-update as you edit the code.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📜 Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+In the project directory, you can run:
+
+- `pnpm dev`: Runs the app in development mode with Turbopack.
+- `pnpm build`: Builds the app for production.
+- `pnpm start`: Starts a production server.
+- `pnpm lint`: Runs the Next.js linter to check for code quality issues.
+
+## 📂 Project Structure
+
+The project is organized as follows:
+
+```
+/
+├── app/                # Main application pages and layout
+├���─ components/         # Reusable React components
+├── hooks/              # Custom React hooks for managing logic
+├── lib/                # Utility functions and libraries
+└── public/             # Static assets, including face-api.js models
+```
