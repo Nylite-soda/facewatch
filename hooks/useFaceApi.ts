@@ -1,23 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as faceapi from "face-api.js";
 
 export function useFaceApi() {
   const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadModels = async () => {
-      try {
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
-          // faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-        ]);
-        setModelsLoaded(true);
-      } catch (error) {
-        console.error("Error loading face-api models:", error);
-      }
-    };
-    loadModels();
+  const loadModels = useCallback(async () => {
+    setError(null);
+    try {
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      setModelsLoaded(true);
+    } catch (err) {
+      console.error("Error loading face-api models:", err);
+      setError("Failed to load face detection models. Please check your network connection and try again.");
+    }
   }, []);
 
-  return modelsLoaded;
+  useEffect(() => {
+    loadModels();
+  }, [loadModels]);
+
+  return { modelsLoaded, error, loadModels };
 }

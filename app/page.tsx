@@ -31,7 +31,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { stream, error: cameraError, getCameraStream } = useCamera();
-  const modelsLoaded = useFaceApi();
+  const { modelsLoaded, error: modelError, loadModels } = useFaceApi();
   const {
     isRecording,
     recordedUrl,
@@ -54,7 +54,7 @@ export default function Home() {
     setRecordedUrl(null);
   };
 
-  const isLoading = !modelsLoaded && !cameraError;
+  const isLoading = !modelsLoaded && !cameraError && !modelError;
   const showVideoFeed = stream && modelsLoaded;
 
   return (
@@ -82,6 +82,24 @@ export default function Home() {
               </Center>
             )}
 
+            {modelError && (
+              <Center h={400}>
+                <Alert
+                  icon={<IconAlertCircle size="1rem" />}
+                  title="Model Error"
+                  color="red"
+                  variant="light"
+                >
+                  <Stack>
+                    <Text>{modelError}</Text>
+                    <Button onClick={loadModels} variant="outline">
+                      Try Again
+                    </Button>
+                  </Stack>
+                </Alert>
+              </Center>
+            )}
+
             {cameraError && (
               <Center h={400}>
                 <Alert
@@ -100,7 +118,7 @@ export default function Home() {
               </Center>
             )}
 
-            {!isLoading && !cameraError && !stream && (
+            {!isLoading && !cameraError && !modelError && !stream && (
               <Center h={400}>
                 <Stack align="center">
                   <Text>Camera is not connected.</Text>
